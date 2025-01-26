@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 
 const NextLoginPage = () => {
   const router = useRouter();
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string>("");
   // const session = useSession();
   const { data: session, status: sessionStatus } = useSession();
 
@@ -25,11 +25,15 @@ const NextLoginPage = () => {
     return emailRegex.test(email);
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const email = e.target[0].value;
-    const password = e.target[1].value;
 
+    const form = e.currentTarget;
+    const emailInput = form.elements.namedItem("email") as HTMLInputElement;
+    const passwordInput = form.elements.namedItem("password") as HTMLInputElement;
+
+    const email: string = emailInput?.value;
+    const password: string = passwordInput?.value;
     if (!isValidEmail(email)) {
       setError("Email is invalid");
       toast.error("Email is invalid");
@@ -112,7 +116,7 @@ const NextLoginPage = () => {
                 </div>
               </div>
 
-              
+
 
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
@@ -200,11 +204,11 @@ const NextLoginPage = () => {
                     GitHub
                   </span>
                 </button>
-                
+
               </div>
               <p className="text-red-600 text-center text-[16px] my-4">
-                  {error && error}
-                </p>
+                {error && error}
+              </p>
             </div>
           </div>
         </div>

@@ -7,7 +7,7 @@ import Image from "next/image";
 import toast from "react-hot-toast";
 
 const RegisterPage = () => {
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string>("");
   const router = useRouter();
   const { data: session, status: sessionStatus } = useSession();
 
@@ -21,12 +21,18 @@ const RegisterPage = () => {
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
     return emailRegex.test(email);
   };
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const email = e.target[0].value;
-    const password = e.target[1].value;
-    const confirmPassword = e.target[2].value;
 
+    const form = e.currentTarget;
+    const emailInput = form.elements.namedItem("email") as HTMLInputElement;
+    const passwordInput = form.elements.namedItem("password") as HTMLInputElement;
+    const confirmPasswordInput = form.elements.namedItem("confirmPassword") as HTMLInputElement;
+
+
+    const email: string = emailInput?.value;
+    const password: string = passwordInput?.value;
+    const confirmPassword: string = confirmPasswordInput?.value;
     if (!isValidEmail(email)) {
       setError("Email is invalid");
       toast.error("Email is invalid");
@@ -39,11 +45,11 @@ const RegisterPage = () => {
       return;
     }
 
-    if (confirmPassword !== password) {
-      setError("Passwords are not equal");
-      toast.error("Passwords are not equal")
-      return;
-    }
+    // if (confirmPassword !== password) {
+    //   setError("Passwords are not equal");
+    //   toast.error("Passwords are not equal")
+    //   return;
+    // }
 
     try {
       const res = await fetch("/api/register", {

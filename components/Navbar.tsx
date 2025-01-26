@@ -11,7 +11,7 @@ import Image from "next/image";
 
 const Navbar = () => {
   const { data: session }: any = useSession();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
 
   const navigation = [
     { name: "Home", href: "/" },
